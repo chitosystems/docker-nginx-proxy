@@ -31,11 +31,15 @@ services:
       - nginx
     profiles:
       - main
+    container_name: ${NGINX_PROXY_ACME_CONTAINER_NAME}
 
 networks:
   nginx:
 
 volumes:
   nginx-certs:
+    name: main_certs
   nginx-vhost:
+    name: main_vhost
   nginx-html:
+    name: main_html
