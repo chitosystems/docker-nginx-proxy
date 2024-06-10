@@ -2,3 +2,5 @@
 
 !/setup_docker.sh
 !/.gitignore
+!/LICENSE
+!/README.md
