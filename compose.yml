@@ -6,14 +6,16 @@ services:
       - "${NGINX_PROXY_PORT_HOST}:${NGINX_PROXY_PORT_CONTAINER}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - nginx-certs:/etc/nginx/certs:ro
-      - nginx-vhost:/etc/nginx/vhost.d
-      - nginx-html:/usr/share/nginx/html
+      - main_certs:/etc/nginx/certs:ro
+      - main_vhost:/etc/nginx/vhost.d
+      - main_html:/usr/share/nginx/html
     networks:
       - nginx
     profiles:
       - main
     container_name: ${NGINX_PROXY_CONTAINER_NAME}
+    labels:
+      - com.github.nginx-proxy.nginx
 
   nginx-proxy-acme:
     image: nginxproxy/acme-companion
@@ -22,11 +24,12 @@ services:
       - nginx-proxy
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - nginx-certs:/etc/nginx/certs
-      - nginx-vhost:/etc/nginx/vhost.d
-      - nginx-html:/usr/share/nginx/html
+      - main_certs:/etc/nginx/certs
+      - main_vhost:/etc/nginx/vhost.d
+      - main_html:/usr/share/nginx/html
     environment:
       - DEFAULT_EMAIL=${DEFAULT_EMAIL}
+      - NGINX_PROXY_CONTAINER=${NGINX_PROXY_CONTAINER_NAME}
     networks:
       - nginx
     profiles:
@@ -37,9 +40,6 @@ networks:
   nginx:
 
 volumes:
-  nginx-certs:
-    name: main_certs
-  nginx-vhost:
-    name: main_vhost
-  nginx-html:
-    name: main_html
+  main_certs:
+  main_vhost:
+  main_html:
